@@ -92,6 +92,7 @@ def main_func(plot=False):
 
 
     # Optimize
+    global i, out_avg, psrn_noisy_last, last_net
     net_input_saved = net_input.detach().clone()
     noise = net_input.detach().clone()
     out_avg = None
