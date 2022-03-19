@@ -23,7 +23,7 @@ def main_func(plot=False):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     imsize = -1
-    PLOT = False
+    PLOT = plot
     sigma = 50
     sigma_ = sigma / 255
 
