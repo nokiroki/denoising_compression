@@ -72,7 +72,7 @@ def main_func(plot=False):
                need_sigmoid=True, need_bias=True, pad=pad, act_fun=act_fun)
 
     net = net.to('cuda')
-
+    print(net)
     # Коммент насчёт работоспособности - ниже будут три строчки, которые я заменил
     # Я не уверен, нужны ли они и правильно ли я заменил, но если будет падать, попробуй вернуть как было
     # net_input = get_noise(input_depth, INPUT, (img_pil.size[1], img_pil.size[0])).type(dtype).detach()
