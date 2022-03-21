@@ -125,6 +125,7 @@ def main_func(plot=False):
 
         # Note that we do not have GT for the "snail" example
         # So 'PSRN_gt', 'PSNR_gt_sm' make no sense
+        print('test')
         print('Iteration %05d    Loss %f   PSNR_noisy: %f   PSRN_gt: %f PSNR_gt_sm: %f' % (
         i, total_loss.item(), psrn_noisy, psrn_gt, psrn_gt_sm), '\r', end='')
         if PLOT and i % show_every == 0:
