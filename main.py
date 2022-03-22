@@ -52,7 +52,7 @@ def main_func(plot=False):
     show_every = 100
     exp_weight = 0.99
 
-    num_iter = 3000
+    num_iter = 1500
     input_depth = 32
     figsize = 4
 
@@ -73,7 +73,7 @@ def main_func(plot=False):
                need_sigmoid=True, need_bias=True, pad=pad, act_fun=act_fun)
 
     net = net.to('cuda')
-    print(net)
+    # print(net)
     # Коммент насчёт работоспособности - ниже будут три строчки, которые я заменил
     # Я не уверен, нужны ли они и правильно ли я заменил, но если будет падать, попробуй вернуть как было
     # net_input = get_noise(input_depth, INPUT, (img_pil.size[1], img_pil.size[0])).type(dtype).detach()
@@ -102,8 +102,15 @@ def main_func(plot=False):
 
     i = 0
 
+    global losses, psnrs_noisy, psnrs_gt, ssims_noisy, ssims_gt
+    losses = []
+    psnrs_noisy = []
+    psnrs_gt = []
+    ssims_noisy = []
+    ssims_gt = []
+
     def closure():
-        global i, out_avg, psrn_noisy_last, last_net, net_input
+        global i, out_avg, psrn_noisy_last, last_net, net_input, losses, psnrs_noisy, psnrs_gt, ssims_noisy, ssims_gt
 
         if reg_noise_std > 0:
             net_input = net_input_saved + (noise.normal_() * reg_noise_std)
@@ -123,11 +130,13 @@ def main_func(plot=False):
         psrn_gt = compare_psnr(img_np, out.detach().cpu().numpy()[0])
         psrn_gt_sm = compare_psnr(img_np, out_avg.detach().cpu().numpy()[0])
 
+        ssim_noisy = compare_ssim(img_noisy_np, out.detach().cpu().numpy()[0])
+        ssim_gt = compare_ssim(img_np, out.detach().cpu().numpy()[0])
+
         # Note that we do not have GT for the "snail" example
         # So 'PSRN_gt', 'PSNR_gt_sm' make no sense
-        print(total_loss.item())
-        print('Iteration %05d    Loss %f   PSNR_noisy: %f   PSRN_gt: %f PSNR_gt_sm: %f' % (
-        i, total_loss.item(), psrn_noisy, psrn_gt, psrn_gt_sm))
+        print('Iteration %05d  Loss %f  PSNR_noisy: %f  PSNR_gt: %f  PSNR_gt_sm: %f  SSIM_noisy: %f  SSIM_gt: %f' % (
+        i, total_loss.item(), psrn_noisy, psrn_gt, psrn_gt_sm, ssim_noisy, ssim_gt))
         if PLOT and i % show_every == 0:
             out_np = torch_to_np(out)
             plot_image_grid([np.clip(out_np, 0, 1),
@@ -150,11 +159,9 @@ def main_func(plot=False):
 
         return total_loss
 
-
     p = get_params(OPT_OVER, net, net_input)
     optimize(OPTIMIZER, p, closure, LR, num_iter)
     # ---------------------
-
 
     out_np = torch_to_np(net(net_input))
     q = plot_image_grid([np.clip(out_np, 0, 1), img_np], factor=13)
