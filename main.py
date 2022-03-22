@@ -15,7 +15,7 @@ from skimage.metrics import peak_signal_noise_ratio as compare_psnr,\
     structural_similarity as compare_ssim
 
 
-def main_func(plot=False):
+def main_func(plot=False, num_iters=1500):
 
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark =True
@@ -52,7 +52,7 @@ def main_func(plot=False):
     show_every = 100
     exp_weight = 0.99
 
-    num_iter = 1500
+    num_iter = num_iters
     input_depth = 32
     figsize = 4
 
