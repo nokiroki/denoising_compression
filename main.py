@@ -52,7 +52,7 @@ def main_func(plot=False):
     show_every = 100
     exp_weight = 0.99
 
-    num_iter = 15
+    num_iter = 1500
     input_depth = 32
     figsize = 4
 
