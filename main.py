@@ -11,7 +11,8 @@ from models import skip, optimize
 import torch
 import torch.optim
 
-from skimage.metrics import peak_signal_noise_ratio as compare_psnr
+from skimage.metrics import peak_signal_noise_ratio as compare_psnr,\
+    structural_similarity as compare_ssim
 
 
 def main_func(plot=False):
@@ -101,7 +102,6 @@ def main_func(plot=False):
 
     i = 0
 
-
     def closure():
         global i, out_avg, psrn_noisy_last, last_net, net_input
 
@@ -127,7 +127,7 @@ def main_func(plot=False):
         # So 'PSRN_gt', 'PSNR_gt_sm' make no sense
         print(total_loss.item())
         print('Iteration %05d    Loss %f   PSNR_noisy: %f   PSRN_gt: %f PSNR_gt_sm: %f' % (
-        i, total_loss.item(), psrn_noisy, psrn_gt, psrn_gt_sm), '\r', end='')
+        i, total_loss.item(), psrn_noisy, psrn_gt, psrn_gt_sm))
         if PLOT and i % show_every == 0:
             out_np = torch_to_np(out)
             plot_image_grid([np.clip(out_np, 0, 1),
