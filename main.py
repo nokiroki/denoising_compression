@@ -130,6 +130,8 @@ def main_func(plot=False):
         psrn_gt = compare_psnr(img_np, out.detach().cpu().numpy()[0])
         psrn_gt_sm = compare_psnr(img_np, out_avg.detach().cpu().numpy()[0])
 
+        print(img_noisy_np.shape)
+        print(out.detach().cpu().numpy()[0].shape)
         ssim_noisy = compare_ssim(img_noisy_np, out.detach().cpu().numpy()[0], multichannel=True)
         ssim_gt = compare_ssim(img_np, out.detach().cpu().numpy()[0], multichannel=True)
 
