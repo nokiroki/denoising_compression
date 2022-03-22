@@ -130,8 +130,8 @@ def main_func(plot=False):
         psrn_gt = compare_psnr(img_np, out.detach().cpu().numpy()[0])
         psrn_gt_sm = compare_psnr(img_np, out_avg.detach().cpu().numpy()[0])
 
-        ssim_noisy = compare_ssim(img_noisy_np, out.detach().cpu().numpy()[0])
-        ssim_gt = compare_ssim(img_np, out.detach().cpu().numpy()[0])
+        ssim_noisy = compare_ssim(img_noisy_np, out.detach().cpu().numpy()[0], multichannel=True)
+        ssim_gt = compare_ssim(img_np, out.detach().cpu().numpy()[0], multichannel=True)
 
         # Note that we do not have GT for the "snail" example
         # So 'PSRN_gt', 'PSNR_gt_sm' make no sense
