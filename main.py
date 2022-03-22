@@ -52,7 +52,7 @@ def main_func(plot=False):
     show_every = 100
     exp_weight = 0.99
 
-    num_iter = 1500
+    num_iter = 15
     input_depth = 32
     figsize = 4
 
@@ -133,6 +133,12 @@ def main_func(plot=False):
         ssim_noisy = compare_ssim(img_noisy_np.T, out.detach().cpu().numpy()[0].T, multichannel=True)
         ssim_gt = compare_ssim(img_np.T, out.detach().cpu().numpy()[0].T, multichannel=True)
 
+        losses.append(total_loss.item())
+        psnrs_noisy.append(psrn_noisy)
+        psnrs_gt.append(psrn_gt)
+        ssims_noisy.append(ssim_noisy)
+        ssims_gt.append(ssim_gt)
+
         # Note that we do not have GT for the "snail" example
         # So 'PSRN_gt', 'PSNR_gt_sm' make no sense
         print('Iteration %05d  Loss %f  PSNR_noisy: %f  PSNR_gt: %f  PSNR_gt_sm: %f  SSIM_noisy: %f  SSIM_gt: %f' % (
@@ -165,6 +171,7 @@ def main_func(plot=False):
 
     out_np = torch_to_np(net(net_input))
     q = plot_image_grid([np.clip(out_np, 0, 1), img_np], factor=13)
+    return losses, psnrs_noisy, psnrs_gt, ssims_noisy, ssims_gt
 
 
 if __name__ == '__main__':
