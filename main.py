@@ -73,12 +73,12 @@ def main_func(plot=False, num_iters=10):
                need_sigmoid=True, need_bias=True, pad=pad, act_fun=act_fun)
 
     net = net.to('cuda')
-    # print(net)
+    print(net)
     # Коммент насчёт работоспособности - ниже будут три строчки, которые я заменил
     # Я не уверен, нужны ли они и правильно ли я заменил, но если будет падать, попробуй вернуть как было
     # net_input = get_noise(input_depth, INPUT, (img_pil.size[1], img_pil.size[0])).type(dtype).detach()
     net_input = get_noise(input_depth, INPUT, (img_pil.size[1], img_pil.size[0])).to(device)
-    print(net_input.shape)
+    # print(net_input.shape)
 
     # Compute number of parameters
     s = sum([np.prod(list(p.size())) for p in net.parameters()])
