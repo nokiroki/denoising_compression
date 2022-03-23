@@ -15,7 +15,7 @@ from skimage.metrics import peak_signal_noise_ratio as compare_psnr,\
     structural_similarity as compare_ssim
 
 
-def main_func(plot=False, num_iters=1500):
+def main_func(plot=False, num_iters=10):
 
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark =True
@@ -169,9 +169,10 @@ def main_func(plot=False, num_iters=1500):
     p = get_params(OPT_OVER, net, net_input)
     optimize(OPTIMIZER, p, closure, LR, num_iter)
     # ---------------------
-
+    
     out_np = torch_to_np(net(net_input))
     q = plot_image_grid([np.clip(out_np, 0, 1), img_np], factor=13)
+    torch.save(net, 'net.pt')
     return losses, psnrs_noisy, psnrs_gt, ssims_noisy, ssims_gt
 
 
