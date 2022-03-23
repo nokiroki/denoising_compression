@@ -15,12 +15,11 @@ from skimage.metrics import peak_signal_noise_ratio as compare_psnr,\
     structural_similarity as compare_ssim
 
 
-def main_func(plot=False, num_iters=10, device='cpu'):
-    
-    if device == 'cuda':
-        torch.backends.cudnn.enabled = True
-        torch.backends.cudnn.benchmark =True
-        dtype = torch.cuda.FloatTensor
+def main_func(net, plot=False, num_iters=10, device='cpu'):
+
+    torch.backends.cudnn.enabled = True
+    torch.backends.cudnn.benchmark =True
+    dtype = torch.cuda.FloatTensor
 
 #     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -43,7 +42,7 @@ def main_func(plot=False, num_iters=10, device='cpu'):
 
     # Setup block
     INPUT = 'noise'  # 'meshgrid'
-    pad = 'reflection'
+#     pad = 'reflection'
     OPT_OVER = 'net'  # 'net,input'
 
     reg_noise_std = 1. / 20.  # set to 1./20. for sigma=50
@@ -57,23 +56,24 @@ def main_func(plot=False, num_iters=10, device='cpu'):
     input_depth = 32
     figsize = 4
 
-    skip_n33d = 128
-    skip_n33u = 128
-    skip_n11 = 4
-    num_scales = 5
-    upsample_mode = 'bilinear'
-    downsample_mode = 'stride'
-    n_channels = 3
-    act_fun = 'LeakyReLU'
+#     skip_n33d = 128
+#     skip_n33u = 128
+#     skip_n11 = 4
+#     num_scales = 5
+#     upsample_mode = 'bilinear'
+#     downsample_mode = 'stride'
+#     n_channels = 3
+#     act_fun = 'LeakyReLU'
 
-    net = skip(input_depth, n_channels,
-               num_channels_down=[skip_n33d] * num_scales,
-               num_channels_up=[skip_n33u] * num_scales,
-               num_channels_skip=[skip_n11] * num_scales,
-               upsample_mode=upsample_mode, downsample_mode=downsample_mode,
-               need_sigmoid=True, need_bias=True, pad=pad, act_fun=act_fun)
+#     net = skip(input_depth, n_channels,
+#                num_channels_down=[skip_n33d] * num_scales,
+#                num_channels_up=[skip_n33u] * num_scales,
+#                num_channels_skip=[skip_n11] * num_scales,
+#                upsample_mode=upsample_mode, downsample_mode=downsample_mode,
+#                need_sigmoid=True, need_bias=True, pad=pad, act_fun=act_fun)
 
-    net = net.to('cuda')
+#     net = net.to('cuda')
+    net = net.to(device)
     # print(net)
     # Коммент насчёт работоспособности - ниже будут три строчки, которые я заменил
     # Я не уверен, нужны ли они и правильно ли я заменил, но если будет падать, попробуй вернуть как было
